@@ -1,0 +1,15 @@
+version: '3'
+services:
+  eureka-server:
+    build:
+      context: ./eureka
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+
+  student:
+    build:
+      context: ./student/
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
