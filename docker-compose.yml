@@ -13,3 +13,17 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
+
+  library:
+    build:
+      context: ./library/
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+
+  order:
+    build:
+      context: ./order/
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8002"
