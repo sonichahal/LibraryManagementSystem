@@ -6,3 +6,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8761:8761"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork :
