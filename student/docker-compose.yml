@@ -1,33 +1,37 @@
 version: '3'
 services:
   database:
-    image: mysql:latest
-    container_name: database.dev
-    command: mysqld --user=root --verbose
+    image: mysql
+    container_name: mysql-db
     ports:
       - "3307:3306"
+    volumes:
+    - mysql_volume:/var/lib/mysql
     environment:
-      MYSQL_DATABASE: "library"
-      MYSQL_USER: "root"
-      MYSQL_PASSWORD: "root"
-      MYSQL_ROOT_PASSWORD: "root"
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      MYSQL_DRIVER: "com.mysql.cj.jdbc.Driver"
-      MYSQL.HIBERNATE.DIALECT: "org.hibernate.dialect.MySQL5Dialect"
-      MYSQL.HIBERNATE.SHOW_SQL: "true"
-      MYSQL.HIBERNATE.HBM2DDL.AUTO: "update"
-
+      MYSQL_DATABASE: library
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - mynetwork
 
   student:
     build:
       context: ./
       dockerfile: Dockerfile
+    container_name: student-service
     ports:
       - "8000:8000"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://library-db:3306/library?autoReconnect=true&createDatabaseIfNotExist=true
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
-      eureka.client.service-url.defaulZone: http://localhost:8761/eureka
+      MYSQL_URL: jdbc:mysql://database:3306/library?autoReconnect=true&createDatabaseIfNotExist=true
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: root
+#      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://192.168.32.2:8761/eureka
+      EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE: http://localhost:8761/eureka/
     depends_on:
       - database
+    networks:
+      - mynetwork
+
+volumes:
+  mysql_volume :
+networks:
+  mynetwork :
