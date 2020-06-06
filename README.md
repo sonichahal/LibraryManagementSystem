@@ -1,13 +1,14 @@
 ## LibraryManagementSystem
 It is a whole pipeline from building the application to the deployment. This is the sample application which contains four microservices and configured with Eureka server and Client.
-###Technology Used:
+
+Technology Used:
  - Spring Boot
  - MySql 
  - Eureka server and Client
  - Docker
  - Jenkins
  
-####Microservices:
+Microservices:
 1. Eureka-Server 
 -This service has only eureka server configured 
 2. Student
