@@ -6,6 +6,7 @@ It is a whole pipeline from building the application to the deployment. This is 
  - Eureka server and Client
  - Docker
  - Jenkins
+ 
 ####Microservices:
 1. Eureka-Server 
 -This service has only eureka server configured 
