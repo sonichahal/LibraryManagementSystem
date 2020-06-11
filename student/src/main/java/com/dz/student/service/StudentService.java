@@ -9,5 +9,5 @@ public interface StudentService {
 
     Student addStudent(Student student);
 
-    ResponseDTO<Student> getStudents();
+    ResponseDTO<Student> getStudents() throws InterruptedException;
 }

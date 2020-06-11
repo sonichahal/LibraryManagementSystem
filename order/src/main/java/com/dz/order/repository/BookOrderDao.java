@@ -4,7 +4,7 @@ import com.dz.order.model.BookOrder;
 
 public interface BookOrderDao {
 
-    BookOrder placeOrder(BookOrder bookOrder);
+    BookOrder saveBookOrder(BookOrder bookOrder);
 
     void updateBookQuantity(String bookID, Integer updatedQuantity);
 }

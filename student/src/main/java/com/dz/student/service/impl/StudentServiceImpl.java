@@ -5,6 +5,7 @@ import com.dz.student.model.Student;
 import com.dz.student.repository.StudentDao;
 import com.dz.student.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +31,9 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public ResponseDTO<Student> getStudents() {
+    @Cacheable(value = "studentsCache", key = "'studentsList'")
+    public ResponseDTO<Student> getStudents() throws InterruptedException {
+        System.out.println("Retrieving data from the Database!");
         ResponseDTO<Student> responseDTO = new ResponseDTO();
         responseDTO.setCount(studentDao.getStudents().size());
         responseDTO.setData(studentDao.getStudents());

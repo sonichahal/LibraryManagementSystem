@@ -32,7 +32,7 @@ public class LibraryController {
     }
 
     @PutMapping("/updateBook")
-    public ResponseEntity<Book> updateBookQuantity(@RequestBody Book book, String quantity) {
+    public ResponseEntity<Book> updateBook(@RequestBody Book book, String quantity) {
         if (Objects.nonNull(libraryService.updateBook(book, quantity))) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
@@ -40,7 +40,7 @@ public class LibraryController {
     }
 
     @PatchMapping("/updateById/{bookId}/{quantity}")
-    public ResponseEntity<Book> updateBookByQuantity(@PathVariable("bookId") String bookId, @PathVariable("quantity") Integer quantity) {
+    public ResponseEntity<Book> updateBookQuantity(@PathVariable("bookId") String bookId, @PathVariable("quantity") Integer quantity) {
         if (Objects.nonNull(libraryService.updateBookQuantity(bookId, quantity))) {
             return new ResponseEntity<>(HttpStatus.OK);
         }

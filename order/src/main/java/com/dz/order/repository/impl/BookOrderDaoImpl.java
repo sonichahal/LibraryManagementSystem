@@ -14,7 +14,7 @@ public class BookOrderDaoImpl implements BookOrderDao {
     private SessionFactory sessionFactory;
 
     @Override
-    public BookOrder placeOrder(BookOrder bookOrder) {
+    public BookOrder saveBookOrder(BookOrder bookOrder) {
         Session session = sessionFactory.getCurrentSession();
         session.save(bookOrder);
         return bookOrder;

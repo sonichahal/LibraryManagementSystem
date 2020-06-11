@@ -6,9 +6,9 @@ public interface BookOrderService {
 
     BookOrder placeBookOrder(BookOrder bookOrder);
 
-    boolean checkStudent(int userId);
+    boolean checkStudentRegistered(int userId);
 
     boolean isBookAvailable(String bookId);
 
-    void updateBookQuantity(BookOrder bookOrder);
+    void updateBookQuantityInDB(BookOrder bookOrder);
 }

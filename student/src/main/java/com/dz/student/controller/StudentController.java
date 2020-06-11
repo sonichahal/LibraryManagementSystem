@@ -35,7 +35,7 @@ public class StudentController {
     }
 
     @GetMapping("/getStudents")
-    public ResponseDTO<Student> getStudents() {
+    public ResponseDTO<Student> getStudents() throws InterruptedException {
         return studentService.getStudents();
     }
 }

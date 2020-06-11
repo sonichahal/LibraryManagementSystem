@@ -1,6 +1,5 @@
 package com.dz.order.service.impl;
 
-import com.dz.order.dto.ResponseDTO;
 import com.dz.order.exception.BadRequestException;
 import com.dz.order.model.BookOrder;
 import com.dz.order.repository.BookOrderDao;
@@ -14,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,10 +39,10 @@ public class BookOrderServiceImpl implements BookOrderService {
     public BookOrder placeBookOrder(BookOrder bookOrder) {
         bookOrder.setOrderDate(new Date(System.currentTimeMillis()).toString());
         bookOrder.setDueDate(new Date(System.currentTimeMillis() + (10000 * 60 * 60 * 24)).toString());
-        return bookOrderDao.placeOrder(bookOrder);
+        return bookOrderDao.saveBookOrder(bookOrder);
     }
 
-    public void updateBookQuantity(BookOrder bookOrder) {
+    public void updateBookQuantityInDB(BookOrder bookOrder) {
         try {
             HttpEntity<String> requestEntity = new HttpEntity<>(headers);
             String url = libraryUrl + "bookQuantity?bookId=" + bookOrder.getBookId();
@@ -52,8 +50,9 @@ public class BookOrderServiceImpl implements BookOrderService {
             if (response.hasBody() && Objects.nonNull(response.getBody())) {
                 Integer availableBookQuantity = response.getBody();
                 Integer requiredBook = bookOrder.getBookQuantity();
-                this.updateBook(bookOrder.getBookId(), availableBookQuantity - requiredBook);
-                bookOrderDao.placeOrder(bookOrder);
+                this.updateBookQuantityInDB(bookOrder.getBookId(), availableBookQuantity - requiredBook);
+                this.placeBookOrder(bookOrder);
+//                bookOrderDao.saveBookOrder(bookOrder);
             }
         } catch (Exception ex) {
             throw new BadRequestException("Problem occurred with " + ex.getMessage());
@@ -61,7 +60,7 @@ public class BookOrderServiceImpl implements BookOrderService {
     }
 
     @Override
-    public boolean checkStudent(int userId) {
+    public boolean checkStudentRegistered(int userId) {
         try {
             HttpEntity<String> requestEntity = new HttpEntity<>(headers);
             String url = studentUrl + "getById?userId=" + userId;
@@ -92,27 +91,28 @@ public class BookOrderServiceImpl implements BookOrderService {
         return false;
     }
 
-    void updateBook(String bookId, Integer updatedQuantity) {
-        try {
-            HttpEntity<String> requestEntity = new HttpEntity<>(headers);
-            String url = libraryUrl + "getBookById?bookId=" + bookId;
-            ResponseEntity<List> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, List.class);
-            if (Objects.nonNull(response.getBody().get(0))) {
-                JSONObject book = (JSONObject) response.getBody().get(0);
-                String bookID= book.get("bookId").toString();
-                this.updateBookQuantity(bookID, updatedQuantity);
-            }
-        } catch (Exception e) {
-            throw new BadRequestException(e.getMessage());
-        }
-    }
+//    void updateBookQuantityInDB(String bookId, Integer updatedQuantity) {
+//        try {
+//            HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+//            String url = libraryUrl + "getBookById?bookId=" + bookId;
+//            ResponseEntity<List> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, List.class);
+//            if (Objects.nonNull(response.getBody().get(0))) {
+//                JSONObject book = (JSONObject) response.getBody().get(0);
+//                String bookID= book.get("bookId").toString();
+//                this.updateBookQuantity(bookID, updatedQuantity);
+//            }
+//        } catch (Exception e) {
+//            throw new BadRequestException(e.getMessage());
+//        }
+//    }
 
-    public void updateBookQuantity(String bookID, Integer updatedQuantity) {
+    public void updateBookQuantityInDB(String bookID, Integer updatedQuantity) {
         try {
             HttpEntity<String> requestEntity = new HttpEntity<>(headers);
             String url = libraryUrl + "updateById/" + bookID + "/" + updatedQuantity;
             ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.PATCH, requestEntity, String.class);
             if (Objects.nonNull(response.getBody())) {
+                //TODO need to update
                 response.getBody();
             }
         } catch (Exception e) {
