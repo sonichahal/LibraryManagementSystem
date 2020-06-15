@@ -26,6 +26,11 @@ public class LibraryController {
         return libraryService.getById(bookId);
     }
 
+    @GetMapping("/getBooks")
+    public List<Book> getBooks() {
+        return libraryService.getBooks();
+    }
+
     @GetMapping("/bookQuantity")
     public Object getBookQuantity(@RequestParam String bookId) {
         return libraryService.getBookQuantity(bookId);
@@ -45,6 +50,11 @@ public class LibraryController {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @DeleteMapping("/deleteById")
+    public  Integer deleteBookById(@RequestParam String bookId) {
+        return libraryService.deleteBookById(bookId);
     }
 
 }

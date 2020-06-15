@@ -8,6 +8,8 @@ public interface LibraryDao {
 
     Book addBook(Book book);
 
+    List<Book> getBooks();
+
     Object getBookQuantity(String bookId);
 
     List<Book> getById(String bookId);
@@ -15,4 +17,6 @@ public interface LibraryDao {
     Integer updateBook(Book bookId, String quantity);
 
     Integer updateBookQuantity(String bookId, Integer quantity);
+
+    Integer deleteBookById(String bookId);
 }
