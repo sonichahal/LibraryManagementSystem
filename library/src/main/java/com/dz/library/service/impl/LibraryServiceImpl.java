@@ -4,6 +4,8 @@ import com.dz.library.model.Book;
 import com.dz.library.repository.LibraryDao;
 import com.dz.library.service.LibraryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +29,13 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
+    @Cacheable(value = "getBooks", key = "'books'")
+    public List<Book> getBooks() {
+        System.out.println("Retrieving data from the database");
+        return libraryDao.getBooks();
+    }
+
+    @Override
     public Object getBookQuantity(String bookId) {
         return libraryDao.getBookQuantity(bookId);
     }
@@ -39,5 +48,11 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     public Integer updateBookQuantity(String bookId, Integer quantity) {
         return libraryDao.updateBookQuantity(bookId, quantity);
+    }
+
+    @Override
+    @CacheEvict(value = "deleteBook", key = "'deleteBook'")
+    public Integer deleteBookById(String bookId) {
+        return libraryDao.deleteBookById(bookId);
     }
 }

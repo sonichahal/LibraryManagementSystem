@@ -31,6 +31,11 @@ public class LibraryDaoImpl implements LibraryDao {
     }
 
     @Override
+    public List<Book> getBooks() {
+        return sessionFactory.getCurrentSession().createQuery("from Book").list();
+    }
+
+    @Override
     public Object getBookQuantity(String bookId) {
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery("select quantity FROM Book b where b.bookId = :bookId");
@@ -64,5 +69,12 @@ public class LibraryDaoImpl implements LibraryDao {
         query.setParameter("quantity", quantity);
         query.setParameter("bookId", bookId);
         return (Integer) query.executeUpdate();
+    }
+
+    @Override
+    public Integer deleteBookById(String bookId) {
+        Query query = sessionFactory.getCurrentSession().createQuery("DELETE Book b where b.bookId = :bookId");
+        query.setParameter("bookId", bookId);
+        return query.executeUpdate();
     }
 }
