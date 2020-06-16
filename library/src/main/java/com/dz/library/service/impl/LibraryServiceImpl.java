@@ -51,7 +51,7 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
-    @CacheEvict(value = "deleteBook", key = "'deleteBook'")
+    @CacheEvict(value = "getbooks", key = "'deleteBook'")
     public Integer deleteBookById(String bookId) {
         return libraryDao.deleteBookById(bookId);
     }
